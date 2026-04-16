@@ -60,7 +60,7 @@ font-weight:bold;
 async function track() {
     const id = document.getElementById("cid").value;
 
-    const res = await fetch(`http://localhost:5000/complaint/${id}`);
+    const res = await fetch(`https://hostel-complaint-system-2lwm.onrender.com/${id}`);
     const result = await res.json();
 
     console.log(result); // DEBUG
