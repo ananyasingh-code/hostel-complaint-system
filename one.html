@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hostel Complaint Management System</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+background-color:azure;
+font-family:Arial, Helvetica, sans-serif;
+}
+
+/* HEADER */
+
+.header-container{
+display:flex;
+flex-wrap:wrap;
+align-items:center;
+justify-content:center;
+gap:15px;
+background-color:#0d99a3;
+padding:15px;
+text-align:center;
+}
+
+.header-container img{
+width:110px;
+max-width:100%;
+}
+
+h1{
+font-size:clamp(22px,4vw,40px);
+color:rgb(153,15,43);
+}
+
+/* COMMON ISSUES */
+
+.common{
+text-align:center;
+font-size:28px;
+font-weight:bold;
+margin:20px;
+}
+
+.issue-images{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:15px;
+margin-top:20px;
+}
+
+.issue-images img{
+width:100%;
+max-width:280px;
+border-radius:20px;
+}
+
+/* FORM */
+
+.form-container{
+width:90%;
+max-width:420px;
+margin:40px auto;
+padding:25px;
+background:white;
+border-radius:12px;
+box-shadow:0 0 10px gray;
+}
+
+.form-container h2{
+text-align:center;
+margin-bottom:20px;
+}
+
+label{
+font-weight:bold;
+}
+
+input,select,textarea{
+width:100%;
+padding:10px;
+margin-top:5px;
+border-radius:5px;
+border:1px solid #ccc;
+}
+
+button{
+background-color:#0d99a3;
+color:white;
+padding:10px 20px;
+border:none;
+border-radius:5px;
+cursor:pointer;
+margin-top:10px;
+}
+
+button:hover{
+background-color:#087c83;
+}
+
+#msg{
+color:green;
+font-weight:bold;
+margin-top:15px;
+text-align:center;
+}
+
+/* FOOTER */
+
+footer{
+background:#0d99a3;
+color:white;
+text-align:center;
+padding:10px;
+margin-top:40px;
+}
+
+/* MOBILE */
+
+@media (max-width:600px){
+
+.header-container{
+flex-direction:column;
+}
+
+.common{
+font-size:22px;
+}
+
+button{
+width:100%;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header-container">
+<img src="shri-ramswaroop-memorial-university-logo-png_seeklogo-502345.png">
+<h1>Hostel Complaint Management System</h1>
+</div>
+
+<div class="common">
+
+Common Hostel Issues
+
+<div class="issue-images">
+
+<img src="waterfan.jpeg">
+<img src="wifi.jpeg">
+<img src="electric.png">
+
+</div>
+
+</div>
+
+<div class="form-container">
+
+<h2>Register Your Problem</h2>
+
+<form onsubmit="showMessage(event)">
+
+<label>Name:</label>
+<input id="name" type="text" placeholder="Enter your name" pattern="[A-Za-z ]+" title="Only letters allowed" required>
+
+<br><br>
+
+<label>Campus Id:</label>
+<input id="campusId" type="text" placeholder="Campus Id" pattern="[0-9]+" title="Only digits allowed" required>
+
+<br><br>
+
+<label>Room Number:</label>
+<input id="roomNumber" type="text" placeholder="Room Number" pattern="[0-9]+" title="Only numbers allowed" required>
+
+<br><br>
+
+<label>Select your Complaint:</label>
+
+<select required>
+
+<option value="">Select Complaint</option>
+<option>Electricity Issue</option>
+<option>Water Leakage</option>
+<option>Wifi Issue</option>
+<option>Broken Fan</option>
+<option>Cleaning Issue</option>
+<option>Furniture Damage</option>
+<option>Mess Food</option>
+<option>Security</option>
+<option>Other Issue</option>
+
+</select>
+
+<br><br>
+
+<label>Describe the Problem</label>
+
+<textarea rows="4" required></textarea>
+
+<br><br>
+
+<label>Upload Image:</label>
+
+<input type="file" accept="image/*" >
+
+<br><br>
+
+<button type="submit">Submit Complaint</button>
+<br><br><a href="track.html">Click here to check status</a>
+<br>
+
+
+
+
+
+</form>
+
+<p id="msg"></p>
+
+</div>
+
+<footer>
+<p>Hostel Complaint Management System | SRMU</p>
+<p>Contact: hosteladmin@srm.edu</p>
+</footer>
+
+<script>
+
+
+async function showMessage(event){
+    event.preventDefault();
+
+    const data = {
+        name: document.getElementById("name").value,
+        campusId: document.getElementById("campusId").value,
+        room: document.getElementById("roomNumber").value,
+        type: document.querySelector("select").value,
+        description: document.querySelector("textarea").value
+    };
+
+    try{
+        const res = await fetch("http://localhost:5000/complaint", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        const result = await res.json();
+        console.log(result);
+
+        document.getElementById("msg").innerHTML =
+        "✅ Complaint Submitted Successfully<br><br>" +
+        "Your Complaint ID: <b>" + (result.id) + "</b><br><br>" +
+        "<a href='track.html'>Click here to Track your Complaint</a>";
+
+    }catch(err){
+        document.getElementById("msg").innerHTML =
+        "❌ Error submitting complaint";
+    }
+}
+</script>
+
+</body>
+</html>     

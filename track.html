@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Track Complaint</title>
+
+<style>
+
+body{
+font-family:Arial, Helvetica, sans-serif;
+background:azure;
+text-align:center;
+padding-top:120px;
+}
+
+h2{
+color:#0d99a3;
+}
+
+input{
+padding:10px;
+width:220px;
+font-size:16px;
+}
+
+button{
+padding:10px 15px;
+background:#0d99a3;
+color:white;
+border:none;
+cursor:pointer;
+margin-left:5px;
+}
+
+button:hover{
+background:#087b83;
+}
+
+#status{
+margin-top:25px;
+font-size:18px;
+font-weight:bold;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>Track Your Complaint</h2>
+
+<input type="text" id="cid" placeholder="Enter Complaint ID">
+
+<button onclick="track()">Check Status</button>
+
+<p id="status"></p>
+
+<script>
+async function track() {
+    const id = document.getElementById("cid").value;
+
+    const res = await fetch(`http://localhost:5000/complaint/${id}`);
+    const result = await res.json();
+
+    console.log(result); // DEBUG
+
+    if(result.success){
+        document.getElementById("status").innerHTML =
+        "Status: " + result.data.status;
+    } else {
+        document.getElementById("status").innerHTML =
+        "❌ Not Found";
+    }
+}
+</script>
+
+</body>
+
+</html>
